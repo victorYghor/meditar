@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">meditar</string>
+    <string name="test">Test</string>
+    <string name="start">Start</string>
+    <string name="timer_picker">timePicker</string>
+    <string name="select_a_number_greater_than_0">Select a number greater than 0</string>
+    <string name="you_cannot_click_in_the_button">You cannot click in the button now</string>
+    <string name="minutes">Minutes</string>
+</resources>
