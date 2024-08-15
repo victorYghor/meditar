@@ -15,7 +15,7 @@
         <activity
             android:name=".StartActivity"
             android:exported="true"
-            android:label="Medtiar"
+            android:label="Meditar"
             android:theme="@style/Theme.App.Starting">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

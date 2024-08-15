@@ -1,16 +1,16 @@
 package com.victoryghor.meditar.timerPicker
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,14 +23,13 @@ import com.victoryghor.meditar.ui.components.SelectTimer
 import com.victoryghor.meditar.ui.theme.blackBackground
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope.coroutineContext
-import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
-import kotlin.coroutines.coroutineContext
 
-@Preview
 @Composable
-fun SelectTimerScreen(viewModel: TimerPickerViewModel = viewModel()) {
+fun SelectTimerScreen(
+    goToRingBellScreen: (minutes: Int) -> Unit,
+    viewModel: TimerPickerViewModel = viewModel()
+) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -38,6 +37,7 @@ fun SelectTimerScreen(viewModel: TimerPickerViewModel = viewModel()) {
         modifier = Modifier
             .fillMaxSize()
             .background(blackBackground)
+            .verticalScroll(rememberScrollState())
     ) {
         LaunchedEffect(uiState.selectTime) {
             launch {
@@ -51,6 +51,7 @@ fun SelectTimerScreen(viewModel: TimerPickerViewModel = viewModel()) {
                 CoroutineScope(Dispatchers.Default).launch {
                     viewModel.selectMinutes(uiState.listState.firstVisibleItemIndex + 1).join()
                 }
+                goToRingBellScreen(uiState.listState.firstVisibleItemIndex + 1)
             },
             text = R.string.start
         )

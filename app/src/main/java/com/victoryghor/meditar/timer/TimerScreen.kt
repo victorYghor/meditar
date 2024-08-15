@@ -7,6 +7,8 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -19,15 +21,17 @@ import com.victoryghor.meditar.ui.components.Timer
 import com.victoryghor.meditar.ui.components.TimerText
 import com.victoryghor.meditar.ui.theme.blackBackground
 
-@Preview
 @Composable
-fun TimerScreen() {
+fun TimerScreen(
+    goToSelectTimeScreen: () -> Unit
+) {
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier
             .fillMaxSize()
             .background(blackBackground)
+            .verticalScroll(rememberScrollState())
     ) {
         Box(
             contentAlignment = Alignment.Center
@@ -41,4 +45,10 @@ fun TimerScreen() {
             R.string.stop,
         )
     }
+}
+
+@Preview
+@Composable
+private fun TimerScreenPreview() {
+    TimerScreen({})
 }
