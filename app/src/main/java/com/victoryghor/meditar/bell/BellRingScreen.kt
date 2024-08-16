@@ -22,8 +22,11 @@ import com.victoryghor.meditar.R
 import com.victoryghor.meditar.ui.theme.blackBackground
 import com.victoryghor.meditar.ui.theme.white0
 
+@Preview
 @Composable
-fun BellScreen(minutesOfPractice: Int, bellState: BellState) {
+fun BellRingScreen(
+    minutesOfPractice: Int? = null
+) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -33,18 +36,14 @@ fun BellScreen(minutesOfPractice: Int, bellState: BellState) {
             .padding(42.dp)
             .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
     ) {
-        Text(
-            stringResource(R.string.minutes_of_practice).format(minutesOfPractice),
-            fontSize = 32.sp,
-            color = white0
-        )
+        minutesOfPractice?.let {
+            Text(
+                stringResource(R.string.minutes_of_practice).format(it),
+                fontSize = 32.sp,
+                color = white0
+            )
+        }
         Spacer(modifier = Modifier.size(220.dp))
-        BellImage(R.drawable.bell_making_sound)
+        BellImage(R.drawable.bell_ring)
     }
-}
-
-@Preview
-@Composable
-fun BellScreenPreview() {
-    BellScreen(15)
 }

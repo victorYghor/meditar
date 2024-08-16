@@ -8,5 +8,6 @@
     <string name="minutes">Minutes</string>
     <string name="stop">Stop</string>
     <string name="hitting_a_tibetan_bell">Hitting a tibetan bell</string>
+    <string name="the_bell_will_be_hitting_x_times">The bell will be hit %d times</string>
     <string name="minutes_of_practice">%d minutes</string>
 </resources>

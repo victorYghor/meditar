@@ -3,6 +3,7 @@ package com.victoryghor.meditar.timer
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineStart
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -38,12 +39,15 @@ class TimerViewModel(selectTimerInMinutes: Int): ViewModel() {
                     currentAngle = (_secondsCount.value.toFloat() / selectTimerInSeconds.toFloat() * 360f)
                 )
             }
+            if(_secondsCount.value >= selectTimerInSeconds)
+                this.cancel()
         }
     }
 
-    fun startTimer() {
+    fun startTimer(goToBellRingScreen: () -> Unit) {
         viewModelScope.launch {
             timerJob.join()
+            goToBellRingScreen()
         }
     }
 }

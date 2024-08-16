@@ -19,7 +19,7 @@ fun TimerText(minutes: String, seconds:String, modifier: Modifier = Modifier) {
         modifier = modifier
     )
 }
-fun formatNumberWithSpace(time: String) = if(time.length == 2) time else time + " "
+fun formatNumberWithSpace(time: String) = if(time.length == 2) time else "0" + time
 
 @Preview
 @Composable

@@ -9,4 +9,5 @@
     <string name="stop">Parar</string>
     <string name="hitting_a_tibetan_bell">Batendo em um sino tibetano</string>
     <string name="minutes_of_practice">%d minutos</string>
+    <string name="the_bell_will_be_hitting_x_times">O sino vai bater %d vezes</string>
 </resources>

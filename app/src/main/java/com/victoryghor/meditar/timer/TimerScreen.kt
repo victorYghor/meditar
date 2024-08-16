@@ -26,7 +26,7 @@ import com.victoryghor.meditar.ui.theme.blackBackground
 
 @Composable
 fun TimerScreen(
-    goToSelectTimeScreen: () -> Unit,
+    goToBellRingScreen: () -> Unit,
     timerViewModel: TimerViewModel
 ) {
     Column(
@@ -39,7 +39,7 @@ fun TimerScreen(
     ) {
         val uiState by timerViewModel.uiState.collectAsStateWithLifecycle()
         LaunchedEffect(Unit) {
-            timerViewModel.startTimer()
+            timerViewModel.startTimer(goToBellRingScreen)
         }
         Box(
             contentAlignment = Alignment.Center
