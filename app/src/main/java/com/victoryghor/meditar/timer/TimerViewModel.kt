@@ -1,6 +1,7 @@
 package com.victoryghor.meditar.timer
 
 import androidx.lifecycle.ViewModel
+import android.util.Log
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.cancel
@@ -25,7 +26,6 @@ class TimerViewModel(selectTimerInMinutes: Int): ViewModel() {
     val uiState: StateFlow<uiStateTimer> = _uiState.asStateFlow()
 
     private val _secondsCount = MutableStateFlow(0L)
-    val secondsCount = _secondsCount.asStateFlow()
 
 
     private val timerJob = viewModelScope.launch(start = CoroutineStart.LAZY) {

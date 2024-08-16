@@ -28,8 +28,8 @@ import kotlinx.coroutines.launch
 @Composable
 fun SelectTimerScreen(
     goToRingBellScreen: (minutes: Int) -> Unit,
-    viewModel: TimerPickerViewModel = viewModel()
 ) {
+    val viewModel: TimerPickerViewModel = viewModel()
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

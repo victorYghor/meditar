@@ -11,8 +11,9 @@ import com.victoryghor.meditar.Destinations.BELLHITSCREEN
 import com.victoryghor.meditar.Destinations.BELLRINGSCREEN
 import com.victoryghor.meditar.Destinations.SELECTTIMER
 import com.victoryghor.meditar.Destinations.TIMER
-import com.victoryghor.meditar.bell.BellHitScreen
-import com.victoryghor.meditar.bell.BellRingScreen
+import com.victoryghor.meditar.bell.BellViewModel
+import com.victoryghor.meditar.bell.HitBellScreen
+import com.victoryghor.meditar.bell.RingBellScreen
 import com.victoryghor.meditar.timer.TimerScreen
 import com.victoryghor.meditar.timer.TimerViewModel
 import com.victoryghor.meditar.timerPicker.SelectTimerScreen
@@ -40,14 +41,14 @@ fun TimerNavHost(
             val minutes = NavBackStackEntry.arguments?.getString("minutes")?.toInt()
             if(minutes == null)
                 Log.e("TimerNavigation", "the miuntes passed to the argument are null")
-            BellHitScreen(minutes ?: 15)
+            HitBellScreen(minutes ?: 15)
         }
         composable(
             BELLRINGSCREEN,
             arguments = listOf(navArgument("minutes"){ nullable = true })
         ) {
             val minutes = it.arguments?.getString("minutes")?.toInt()
-            BellRingScreen(minutes)
+            RingBellScreen(minutes)
         }
         composable(TIMER) {
             TimerScreen(

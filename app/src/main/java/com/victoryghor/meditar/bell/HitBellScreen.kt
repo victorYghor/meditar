@@ -19,13 +19,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.victoryghor.meditar.R
+import com.victoryghor.meditar.ui.theme.black100
 import com.victoryghor.meditar.ui.theme.blackBackground
 import com.victoryghor.meditar.ui.theme.white0
 
-@Preview
 @Composable
-fun BellRingScreen(
-    minutesOfPractice: Int? = null
+fun HitBellScreen(
+    minutesOfPractice: Int,
+    quantityOfHits: Int = 0
 ) {
     Column(
         verticalArrangement = Arrangement.Top,
@@ -36,14 +37,25 @@ fun BellRingScreen(
             .padding(42.dp)
             .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
     ) {
-        minutesOfPractice?.let {
-            Text(
-                stringResource(R.string.minutes_of_practice).format(it),
-                fontSize = 32.sp,
-                color = white0
-            )
-        }
+        Text(
+            stringResource(R.string.minutes_of_practice).format(minutesOfPractice),
+            fontSize = 32.sp,
+            color = white0
+        )
         Spacer(modifier = Modifier.size(220.dp))
-        BellImage(R.drawable.bell_ring)
+        BellImage(R.drawable.hitbell)
+        Spacer(modifier = Modifier.size(128.dp))
+        if (quantityOfHits != 0)
+            Text(
+                stringResource(R.string.the_bell_will_be_hitting_x_times).format(quantityOfHits),
+                fontSize = 24.sp,
+                color = black100
+            )
     }
+}
+
+@Preview
+@Composable
+fun BellScreenPreview() {
+    HitBellScreen(15)
 }

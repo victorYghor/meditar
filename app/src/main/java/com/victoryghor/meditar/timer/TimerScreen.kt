@@ -19,7 +19,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.victoryghor.meditar.R
 import com.victoryghor.meditar.ui.components.CancelButton
-import com.victoryghor.meditar.ui.components.ConfirmButton
 import com.victoryghor.meditar.ui.components.Timer
 import com.victoryghor.meditar.ui.components.TimerText
 import com.victoryghor.meditar.ui.theme.blackBackground
@@ -27,7 +26,7 @@ import com.victoryghor.meditar.ui.theme.blackBackground
 @Composable
 fun TimerScreen(
     goToBellRingScreen: () -> Unit,
-    timerViewModel: TimerViewModel
+    viewModel: TimerViewModel
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -37,9 +36,9 @@ fun TimerScreen(
             .background(blackBackground)
             .verticalScroll(rememberScrollState())
     ) {
-        val uiState by timerViewModel.uiState.collectAsStateWithLifecycle()
+        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
         LaunchedEffect(Unit) {
-            timerViewModel.startTimer(goToBellRingScreen)
+            viewModel.startTimer(goToBellRingScreen)
         }
         Box(
             contentAlignment = Alignment.Center
