@@ -1,7 +1,6 @@
 package com.victoryghor.meditar.bell
 
 import androidx.compose.foundation.background
-import androidx.compose.runtime.*
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
@@ -17,7 +16,6 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -29,9 +27,8 @@ import com.victoryghor.meditar.ui.theme.white0
 @Composable
 fun RingBellScreen(
     uiState: BellUiState,
-    gotToSelectTimer: () -> Unit
-) {
-    val viewModel: BellViewModel = viewModel()
+    startRingBell: () -> Unit
+    ) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -42,7 +39,7 @@ fun RingBellScreen(
             .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
     ) {
         LaunchedEffect(Unit) {
-            viewModel.startRingBell {  gotToSelectTimer() }
+            startRingBell()
         }
         uiState.minutesOfPractice?.let {
             Text(
