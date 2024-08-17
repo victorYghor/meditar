@@ -1,11 +1,9 @@
 package com.victoryghor.meditar.timer
 
-import android.os.Bundle
 import androidx.lifecycle.ViewModel
-import androidx.lifecycle.AbstractSavedStateViewModelFactory
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.viewModelScope
-import androidx.savedstate.SavedStateRegistryOwner
+import com.victoryghor.meditar.util.removeCurlyBrackets
 import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.delay
@@ -15,18 +13,22 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
-data class uiStateTimer(
+data class TimerUIState(
     val currentMinutes: Long = 0,
     val currentSeconds: Long = 0,
     val currentAngle: Float = 0f,
 )
-class TimerViewModel(selectTimerInMinutes: Int, handle: SavedStateHandle): ViewModel() {
+class TimerViewModel(handle: SavedStateHandle): ViewModel() {
+    val selectTimerInMinutes by lazy {
+        handle.get<String>("%s")?.removeCurlyBrackets()?.toInt() ?: 5
+    }
+
     private val selectTimerInSeconds = selectTimerInMinutes * 60L
 
     private val _uiState = MutableStateFlow(
-        uiStateTimer()
+        TimerUIState()
     )
-    val uiState: StateFlow<uiStateTimer> = _uiState.asStateFlow()
+    val uiState: StateFlow<TimerUIState> = _uiState.asStateFlow()
 
     private val _secondsCount = MutableStateFlow(0L)
 
@@ -51,23 +53,6 @@ class TimerViewModel(selectTimerInMinutes: Int, handle: SavedStateHandle): ViewM
         viewModelScope.launch {
             timerJob.join()
             goToBellRingScreen()
-        }
-    }
-
-    companion object {
-        fun providedFactory(
-            selectTimerInMinutes: Int,
-            owner: SavedStateRegistryOwner,
-            defaultArgs: Bundle? = null
-        ) = object : AbstractSavedStateViewModelFactory(owner, defaultArgs) {
-            override fun <T : ViewModel> create(
-                key: String,
-                modelClass: Class<T>,
-                handle: SavedStateHandle
-            ): T {
-                return TimerViewModel(selectTimerInMinutes, handle) as T
-            }
-
         }
     }
 }

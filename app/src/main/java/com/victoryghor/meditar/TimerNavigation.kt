@@ -6,29 +6,32 @@ import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import android.util.Log
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import androidx.savedstate.SavedStateRegistryOwner
-import com.victoryghor.meditar.Destinations.BELLHITSCREEN
-import com.victoryghor.meditar.Destinations.BELLRINGSCREEN
-import com.victoryghor.meditar.Destinations.SELECTTIMER
-import com.victoryghor.meditar.Destinations.TIMER
+import com.victoryghor.meditar.Destinations.HIT_BELL_SCREEN
+import com.victoryghor.meditar.Destinations.RING_BELL_SCREEN
+import com.victoryghor.meditar.Destinations.SELECT_TIMER_SCREEN
+import com.victoryghor.meditar.Destinations.TIMER_SCREEN
 import com.victoryghor.meditar.bell.BellViewModel
 import com.victoryghor.meditar.bell.HitBellScreen
 import com.victoryghor.meditar.bell.RingBellScreen
 import com.victoryghor.meditar.timer.TimerScreen
 import com.victoryghor.meditar.timer.TimerViewModel
 import com.victoryghor.meditar.timerPicker.SelectTimerScreen
+import com.victoryghor.meditar.timerPicker.TimerPickerViewModel
 
 object Destinations {
-    const val SELECTTIMER = "selectTimer"
-    const val TIMER = "timer"
-    const val BELLHITSCREEN = "bellHitScreen/{minutes}"
-    const val BELLRINGSCREEN = "bellRingScreen?minutes={minutes}"
+    const val SELECT_TIMER_SCREEN = "selectTimerScreen"
+    const val TIMER_SCREEN = "timerScreen/{%s}"
+    const val HIT_BELL_SCREEN = "hitBellScreen/{%s}"
+    const val RING_BELL_SCREEN = "ringBellScreen?minutes={%s}"
 }
 @Composable
 fun TimerNavHost(
@@ -36,38 +39,41 @@ fun TimerNavHost(
 ) {
     NavHost(
         navController = navController,
-        startDestination = TIMER
+        startDestination = SELECT_TIMER_SCREEN
     ) {
-        composable(SELECTTIMER) {
+        composable(SELECT_TIMER_SCREEN) {
+            val viewModel: TimerPickerViewModel = viewModel()
+            val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             SelectTimerScreen(
-                goToRingBellScreen = { minutes -> navController.navigate("$BELLHITSCREEN/${minutes}") }
+                goToRingBellScreen = { minutes -> navController.navigate(HIT_BELL_SCREEN.format(minutes)) },
+                selectMinutes = viewModel::selectMinutes,
+                uiState = uiState
             )
         }
-        composable(BELLHITSCREEN) { NavBackStackEntry ->
-            val minutes = NavBackStackEntry.arguments?.getString("minutes")?.toInt()
-            if(minutes == null)
-                Log.e("TimerNavigation", "the miuntes passed to the argument are null")
-            HitBellScreen(minutes ?: 15)
+        composable(HIT_BELL_SCREEN) { NavBackStackEntry ->
+            val bellViewModel = viewModel<BellViewModel>()
+            val bellUiState by bellViewModel.uiState.collectAsStateWithLifecycle()
+            HitBellScreen(bellUiState)
         }
         composable(
-            BELLRINGSCREEN,
+            RING_BELL_SCREEN,
             arguments = listOf(navArgument("minutes"){ nullable = true })
         ) {
-            val minutes = it.arguments?.getString("minutes")?.toInt()
-            RingBellScreen(minutes, { navController.navigate(SELECTTIMER) })
+            val bellViewModel: BellViewModel = viewModel()
+            val bellUiState by bellViewModel.uiState.collectAsStateWithLifecycle()
+            RingBellScreen(bellUiState, { navController.navigate(SELECT_TIMER_SCREEN) })
         }
-        composable(TIMER) {
+        composable(
+            TIMER_SCREEN
+            ) {
+            val timerViewModel: TimerViewModel = viewModel()
+            val timerUIState by timerViewModel.uiState.collectAsStateWithLifecycle()
             TimerScreen(
-                goToBellRingScreen = { navController.navigate("$BELLRINGSCREEN") },
-                viewModel<TimerViewModel>(
-                    factory = TimerViewModel.providedFactory(1, LocalContext.current.getActivity() as SavedStateRegistryOwner)
-                )
+                goToBellRingScreen = { navController.navigate(RING_BELL_SCREEN) },
+                startTimer = timerViewModel::startTimer,
+                uiState = timerUIState,
+                selectMinutes = timerViewModel.selectTimerInMinutes
             )
         }
     }
-}
-fun Context.getActivity(): ComponentActivity? = when (this) {
-    is ComponentActivity -> this
-    is ContextWrapper -> baseContext.getActivity()
-    else -> null
 }

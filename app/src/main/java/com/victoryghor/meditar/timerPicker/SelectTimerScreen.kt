@@ -23,14 +23,15 @@ import com.victoryghor.meditar.ui.components.SelectTimer
 import com.victoryghor.meditar.ui.theme.blackBackground
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
 
 @Composable
 fun SelectTimerScreen(
     goToRingBellScreen: (minutes: Int) -> Unit,
+    selectMinutes: (minutes: Int) -> Job,
+    uiState: TimerPickerState
 ) {
-    val viewModel: TimerPickerViewModel = viewModel()
-    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
@@ -49,7 +50,7 @@ fun SelectTimerScreen(
         ConfirmButton(
             onClick = {
                 CoroutineScope(Dispatchers.Default).launch {
-                    viewModel.selectMinutes(uiState.listState.firstVisibleItemIndex + 1).join()
+                    selectMinutes(uiState.listState.firstVisibleItemIndex + 1).join()
                 }
                 goToRingBellScreen(uiState.listState.firstVisibleItemIndex + 1)
             },

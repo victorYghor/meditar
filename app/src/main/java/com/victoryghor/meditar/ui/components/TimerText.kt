@@ -8,6 +8,7 @@ import androidx.compose.ui.unit.sp
 import com.victoryghor.meditar.ui.theme.white0
 import com.victoryghor.meditar.ui.theme.white100
 import com.victoryghor.meditar.ui.theme.white200
+import com.victoryghor.meditar.ui.theme.white300
 
 
 @Composable
@@ -15,7 +16,7 @@ fun TimerText(minutes: String, seconds:String, modifier: Modifier = Modifier) {
     Text(
         text = formatNumberWithSpace(minutes) + " : " + formatNumberWithSpace(seconds),
         fontSize = 64.sp,
-        color = white100,
+        color = white300,
         modifier = modifier
     )
 }

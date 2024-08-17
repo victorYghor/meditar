@@ -11,14 +11,13 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.victoryghor.meditar.R
 import com.victoryghor.meditar.ui.components.CancelButton
+import com.victoryghor.meditar.ui.components.TextMinutesOfPractice
 import com.victoryghor.meditar.ui.components.Timer
 import com.victoryghor.meditar.ui.components.TimerText
 import com.victoryghor.meditar.ui.theme.blackBackground
@@ -26,7 +25,9 @@ import com.victoryghor.meditar.ui.theme.blackBackground
 @Composable
 fun TimerScreen(
     goToBellRingScreen: () -> Unit,
-    viewModel: TimerViewModel
+    startTimer: (() -> Unit) -> Unit,
+    uiState: TimerUIState,
+    selectMinutes: Int
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -36,10 +37,11 @@ fun TimerScreen(
             .background(blackBackground)
             .verticalScroll(rememberScrollState())
     ) {
-        val uiState by viewModel.uiState.collectAsStateWithLifecycle()
         LaunchedEffect(Unit) {
-            viewModel.startTimer(goToBellRingScreen)
+            startTimer(goToBellRingScreen)
         }
+        TextMinutesOfPractice(minutes = selectMinutes)
+        Spacer(modifier = Modifier.size(64.dp))
         Box(
             contentAlignment = Alignment.Center
         ) {
@@ -57,8 +59,8 @@ fun TimerScreen(
     }
 }
 
-//@Preview
-//@Composable
-//private fun TimerScreenPreview() {
-//    TimerScreen({}, TimerViewModel(15, handle))
-//}
+@Preview
+@Composable
+private fun TimerScreenPreview() {
+    TimerScreen({}, {}, uiState = TimerUIState(5, 30, 180f), 11)
+}
