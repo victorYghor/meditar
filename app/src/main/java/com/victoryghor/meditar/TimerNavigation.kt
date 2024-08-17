@@ -1,12 +1,18 @@
 package com.victoryghor.meditar
 
+import android.content.Context
+import android.content.ContextWrapper
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import android.util.Log
+import androidx.activity.ComponentActivity
+import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import androidx.savedstate.SavedStateRegistryOwner
 import com.victoryghor.meditar.Destinations.BELLHITSCREEN
 import com.victoryghor.meditar.Destinations.BELLRINGSCREEN
 import com.victoryghor.meditar.Destinations.SELECTTIMER
@@ -48,13 +54,20 @@ fun TimerNavHost(
             arguments = listOf(navArgument("minutes"){ nullable = true })
         ) {
             val minutes = it.arguments?.getString("minutes")?.toInt()
-            RingBellScreen(minutes)
+            RingBellScreen(minutes, { navController.navigate(SELECTTIMER) })
         }
         composable(TIMER) {
             TimerScreen(
                 goToBellRingScreen = { navController.navigate("$BELLRINGSCREEN") },
-                TimerViewModel(1)
+                viewModel<TimerViewModel>(
+                    factory = TimerViewModel.providedFactory(1, LocalContext.current.getActivity() as SavedStateRegistryOwner)
+                )
             )
         }
     }
+}
+fun Context.getActivity(): ComponentActivity? = when (this) {
+    is ComponentActivity -> this
+    is ContextWrapper -> baseContext.getActivity()
+    else -> null
 }

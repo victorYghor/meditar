@@ -3,5 +3,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class TimeSettings(
-    val previousMinutes: Int = 0
+    val previousMinutes: Int = 2
 )

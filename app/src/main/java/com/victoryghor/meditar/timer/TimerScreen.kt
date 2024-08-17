@@ -57,8 +57,8 @@ fun TimerScreen(
     }
 }
 
-@Preview
-@Composable
-private fun TimerScreenPreview() {
-    TimerScreen({}, TimerViewModel(15))
-}
+//@Preview
+//@Composable
+//private fun TimerScreenPreview() {
+//    TimerScreen({}, TimerViewModel(15, handle))
+//}

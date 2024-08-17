@@ -29,6 +29,7 @@ import com.victoryghor.meditar.ui.theme.white0
 @Composable
 fun RingBellScreen(
     minutesOfPractice: Int? = null,
+    gotToSelectTimer: () -> Unit
 ) {
     val viewModel: BellViewModel = viewModel()
     Column(
@@ -41,7 +42,7 @@ fun RingBellScreen(
             .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
     ) {
         LaunchedEffect(Unit) {
-
+            viewModel.startRingBell {  gotToSelectTimer() }
         }
         minutesOfPractice?.let {
             Text(
