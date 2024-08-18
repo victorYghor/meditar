@@ -1,5 +1,6 @@
 package com.victoryghor.meditar.bell
 
+import android.media.MediaPlayer
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -35,18 +36,19 @@ class BellViewModel(handle: SavedStateHandle) : ViewModel() {
         _uiState.asStateFlow()
     }
 
-    fun startRingBell(goToNextScreen: () -> Unit) {
+    fun startRingBell(bellPlayer: MediaPlayer? = null, goToNextScreen: () -> Unit) {
         viewModelScope.launch {
-            // tocar o sino
+            bellPlayer?.start()
             delay(4_000L)
             withContext(Dispatchers.Main) {
                 goToNextScreen()
             }
         }
     }
-    fun startHitBell(goToNextScreen: () -> Unit) {
+    fun startHitBell(bellPlayer: MediaPlayer, goToNextScreen: () -> Unit) {
         viewModelScope.launch {
-            delay(1_200L)
+            bellPlayer.start()
+            delay(2_000L)
             withContext(Dispatchers.Main) {
                 goToNextScreen()
             }

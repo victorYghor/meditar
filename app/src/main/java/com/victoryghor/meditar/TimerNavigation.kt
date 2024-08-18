@@ -2,6 +2,7 @@ package com.victoryghor.meditar
 
 import android.content.Context
 import android.content.ContextWrapper
+import android.media.MediaPlayer
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.activity.ComponentActivity
@@ -44,7 +45,8 @@ var previousRoute: String = SELECT_TIMER_SCREEN
 
 @Composable
 fun TimerNavHost(
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    bellPlayer: MutableList<MediaPlayer>
 ) {
     fun navigateWithoutTrace(destination: String) {
         navController.navigate(destination) {
@@ -77,7 +79,7 @@ fun TimerNavHost(
             val bellUiState by bellViewModel.uiState.collectAsStateWithLifecycle()
             val minutes = it.arguments?.getString("minutes")?.removeCurlyBrackets() ?: "5"
             HitBellScreen(bellUiState) {
-                bellViewModel.startHitBell {
+                bellViewModel.startHitBell(bellPlayer = bellPlayer[bellUiState.quantityOfHits - 1]) {
                     previousRoute = HIT_BELL_SCREEN
                     navigateWithoutTrace(
                         "ringBellScreen?minutes=$minutes?quantityOfHits=${bellUiState.quantityOfHits}"
@@ -98,6 +100,7 @@ fun TimerNavHost(
             RingBellScreen(
                 bellUiState
             ) {
+
                 val goToNextScreen: () -> Unit =
                     {
                         when (previousRoute) {
@@ -129,7 +132,10 @@ fun TimerNavHost(
                             }
                         }
                     }
-                bellViewModel.startRingBell(goToNextScreen)
+                bellViewModel.startRingBell(
+                    if (previousRoute == TIMER_SCREEN) bellPlayer.first() else null,
+                    goToNextScreen
+                )
             }
         }
         composable(
