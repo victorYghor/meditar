@@ -39,7 +39,7 @@ class BellViewModel(handle: SavedStateHandle) : ViewModel() {
     fun startRingBell(bellPlayer: MediaPlayer? = null, goToNextScreen: () -> Unit) {
         viewModelScope.launch {
             bellPlayer?.start()
-            delay(4_000L)
+            delay(5_000L)
             withContext(Dispatchers.Main) {
                 goToNextScreen()
             }
@@ -48,7 +48,7 @@ class BellViewModel(handle: SavedStateHandle) : ViewModel() {
     fun startHitBell(bellPlayer: MediaPlayer, goToNextScreen: () -> Unit) {
         viewModelScope.launch {
             bellPlayer.start()
-            delay(2_000L)
+            delay(3_000L)
             withContext(Dispatchers.Main) {
                 goToNextScreen()
             }
