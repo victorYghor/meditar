@@ -20,7 +20,7 @@ data class TimerUIState(
 )
 class TimerViewModel(handle: SavedStateHandle): ViewModel() {
     val selectTimerInMinutes by lazy {
-        handle.get<String>("%s")?.removeCurlyBrackets()?.toInt() ?: 5
+        handle.get<String>("minutes")?.removeCurlyBrackets()?.toInt() ?: 5
     }
 
     private val selectTimerInSeconds = selectTimerInMinutes * 60L

@@ -20,34 +20,42 @@ import kotlinx.coroutines.flow.update
 
 data class BellUiState(
     val minutesOfPractice: Int? = null,
-    val quantityOfHits: Int = 3,
+    val quantityOfHits: Int
 )
-class BellViewModel(handle: SavedStateHandle): ViewModel() {
-    private val _uiState = MutableStateFlow(BellUiState())
-    val uiState = _uiState.asStateFlow()
+
+class BellViewModel(handle: SavedStateHandle) : ViewModel() {
+    private lateinit var _uiState: MutableStateFlow<BellUiState>
+    val uiState by lazy {
+        _uiState.asStateFlow()
+    }
     val minutesOfPractice by lazy {
-        handle.get<String>("minutes")?.removeCurlyBrackets()?.toInt() ?: 5
+        handle.get<String>("minutes")?.removeCurlyBrackets()?.toInt()
+    }
+
+    val quantityOfHits by lazy {
+        handle.get<String>("quantityOfHits")?.removeCurlyBrackets()?.toInt() ?: 3
     }
     init {
-        _uiState.update {
-            it.copy(minutesOfPractice = minutesOfPractice)
-        }
+        _uiState = MutableStateFlow(
+            BellUiState(
+                minutesOfPractice = minutesOfPractice,
+                quantityOfHits = quantityOfHits
+            )
+        )
     }
     fun startRingBell(goToNextScreen: () -> Unit) {
         viewModelScope.launch {
             // tocar o sino
-            delay(5_000L)
+            delay(4_000L)
             withContext(Dispatchers.Main) {
                 goToNextScreen()
             }
         }
     }
+
     fun startHitBell(goToNextScreen: () -> Unit) {
         viewModelScope.launch {
-            delay(1000L)
-            _uiState.update {
-                it.copy(quantityOfHits = it.quantityOfHits - 1)
-            }
+            delay(1_200L)
             withContext(Dispatchers.Main) {
                 goToNextScreen()
             }

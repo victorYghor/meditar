@@ -35,8 +35,8 @@ import com.victoryghor.meditar.util.removeCurlyBrackets
 object Destinations {
     const val SELECT_TIMER_SCREEN = "selectTimerScreen"
     const val TIMER_SCREEN = "timerScreen/{minutes}"
-    const val HIT_BELL_SCREEN = "hitBellScreen/{minutes}"
-    const val RING_BELL_SCREEN = "ringBellScreen?minutes={minutes}"
+    const val HIT_BELL_SCREEN = "hitBellScreen/{minutes}/{quantityOfHits}"
+    const val RING_BELL_SCREEN = "ringBellScreen?minutes={minutes}?quantityOfHits={quantityOfHits}"
 }
 
 @Composable
@@ -52,8 +52,11 @@ fun TimerNavHost(
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             SelectTimerScreen(
                 goToRingBellScreen = { minutes ->
+                    navController.popBackStack()
                     navController.navigate(
-                        HIT_BELL_SCREEN.replace("minutes", minutes.toString())
+                        HIT_BELL_SCREEN
+                            .replace("minutes", minutes.toString())
+                            .replace("quantityOfHits", "3")
                     )
                 },
                 selectMinutes = viewModel::selectMinutes,
@@ -66,13 +69,18 @@ fun TimerNavHost(
             val minutes = it.arguments?.getString("minutes")?.removeCurlyBrackets() ?: "5"
             HitBellScreen(bellUiState) {
                 bellViewModel.startHitBell {
-                    navController.navigate(RING_BELL_SCREEN.replace("{minutes}", minutes))
+                    navController.navigate(
+                        "ringBellScreen?minutes=$minutes?quantityOfHits=${bellUiState.quantityOfHits}"
+                    )
                 }
             }
         }
         composable(
             RING_BELL_SCREEN,
-            arguments = listOf(navArgument("minutes") { nullable = true })
+            arguments = listOf(
+                navArgument("minutes") { nullable = true },
+                navArgument("quantityOfHits") { nullable = true }
+            )
         ) {
             val bellViewModel: BellViewModel = viewModel()
             val bellUiState by bellViewModel.uiState.collectAsStateWithLifecycle()
@@ -83,16 +91,26 @@ fun TimerNavHost(
                 val goToNextScreen: () -> Unit =
                     when (navController.previousBackStackEntry?.destination?.route) {
                         HIT_BELL_SCREEN -> {
-                            val destination =
-                                if (bellUiState.quantityOfHits == 0)
-                                    TIMER_SCREEN
-                                else
-                                    HIT_BELL_SCREEN
-                            { navController.navigate(destination.replace("{minutes}", minutes)) }
+                            val destination = if (bellUiState.quantityOfHits == 1) {
+                                TIMER_SCREEN
+                            } else {
+                                HIT_BELL_SCREEN.replace(
+                                    "quantityOfHits",
+                                    (bellUiState.quantityOfHits - 1).toString()
+                                )
+                            }
+                            { navController.navigate(destination.replace("minutes", minutes)) }
                         }
 
                         TIMER_SCREEN -> {
-                            { navController.navigate(SELECT_TIMER_SCREEN.replace("{minutes}", minutes)) }
+                            {
+                                navController.navigate(
+                                    SELECT_TIMER_SCREEN.replace(
+                                        "minutes",
+                                        minutes
+                                    )
+                                )
+                            }
                         }
 
                         else -> {
@@ -108,7 +126,10 @@ fun TimerNavHost(
             val timerViewModel: TimerViewModel = viewModel()
             val timerUIState by timerViewModel.uiState.collectAsStateWithLifecycle()
             TimerScreen(
-                goToBellRingScreen = { navController.navigate(RING_BELL_SCREEN) },
+                goToBellRingScreen = {
+                    navController.popBackStack()
+                    navController.navigate(RING_BELL_SCREEN)
+                },
                 startTimer = timerViewModel::startTimer,
                 uiState = timerUIState,
                 selectMinutes = timerViewModel.selectTimerInMinutes
