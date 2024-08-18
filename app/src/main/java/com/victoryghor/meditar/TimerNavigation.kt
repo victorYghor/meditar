@@ -52,12 +52,14 @@ fun TimerNavHost(
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             SelectTimerScreen(
                 goToRingBellScreen = { minutes ->
-                    navController.popBackStack()
                     navController.navigate(
                         HIT_BELL_SCREEN
                             .replace("minutes", minutes.toString())
                             .replace("quantityOfHits", "3")
-                    )
+                    ) {
+                        launchSingleTop = true
+                        popUpTo(0)
+                    }
                 },
                 selectMinutes = viewModel::selectMinutes,
                 uiState = uiState
@@ -99,7 +101,9 @@ fun TimerNavHost(
                                     (bellUiState.quantityOfHits - 1).toString()
                                 )
                             }
-                            { navController.navigate(destination.replace("minutes", minutes)) }
+                            {
+                                navController.navigate(destination.replace("minutes", minutes))
+                            }
                         }
 
                         TIMER_SCREEN -> {
@@ -114,7 +118,8 @@ fun TimerNavHost(
                         }
 
                         else -> {
-                            { Timber.d("reach in a not covered case") }
+                            { Timber.d("reach in a not covered case destination =" +
+                                    " ${navController.previousBackStackEntry?.destination?.route}") }
                         }
                     }
                 bellViewModel.startRingBell(goToNextScreen)
@@ -127,8 +132,10 @@ fun TimerNavHost(
             val timerUIState by timerViewModel.uiState.collectAsStateWithLifecycle()
             TimerScreen(
                 goToBellRingScreen = {
-                    navController.popBackStack()
-                    navController.navigate(RING_BELL_SCREEN)
+                    navController.navigate(RING_BELL_SCREEN) {
+                        launchSingleTop = true
+                        popUpTo(0)
+                    }
                 },
                 startTimer = timerViewModel::startTimer,
                 uiState = timerUIState,
