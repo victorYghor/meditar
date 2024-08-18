@@ -48,11 +48,14 @@ class TimerViewModel(handle: SavedStateHandle): ViewModel() {
                 this.cancel()
         }
     }
-
     fun startTimer(goToBellRingScreen: () -> Unit) {
         viewModelScope.launch {
             timerJob.join()
             goToBellRingScreen()
         }
+    }
+    fun stopTimer(goToNextScreen: () -> Unit) {
+        viewModelScope.cancel()
+        goToNextScreen()
     }
 }

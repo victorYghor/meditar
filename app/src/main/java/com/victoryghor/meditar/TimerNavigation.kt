@@ -5,6 +5,7 @@ import android.content.ContextWrapper
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.activity.ComponentActivity
+import androidx.compose.runtime.clearCompositionErrors
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -39,10 +40,18 @@ object Destinations {
     const val RING_BELL_SCREEN = "ringBellScreen?minutes={minutes}?quantityOfHits={quantityOfHits}"
 }
 
+var previousRoute: String = SELECT_TIMER_SCREEN
+
 @Composable
 fun TimerNavHost(
     navController: NavHostController = rememberNavController()
 ) {
+    fun navigateWithoutTrace(destination: String) {
+        navController.navigate(destination) {
+            launchSingleTop = true
+            popUpTo(0)
+        }
+    }
     NavHost(
         navController = navController,
         startDestination = SELECT_TIMER_SCREEN
@@ -52,14 +61,12 @@ fun TimerNavHost(
             val uiState by viewModel.uiState.collectAsStateWithLifecycle()
             SelectTimerScreen(
                 goToRingBellScreen = { minutes ->
-                    navController.navigate(
+                    previousRoute = SELECT_TIMER_SCREEN
+                    navigateWithoutTrace(
                         HIT_BELL_SCREEN
                             .replace("minutes", minutes.toString())
                             .replace("quantityOfHits", "3")
-                    ) {
-                        launchSingleTop = true
-                        popUpTo(0)
-                    }
+                    )
                 },
                 selectMinutes = viewModel::selectMinutes,
                 uiState = uiState
@@ -71,7 +78,8 @@ fun TimerNavHost(
             val minutes = it.arguments?.getString("minutes")?.removeCurlyBrackets() ?: "5"
             HitBellScreen(bellUiState) {
                 bellViewModel.startHitBell {
-                    navController.navigate(
+                    previousRoute = HIT_BELL_SCREEN
+                    navigateWithoutTrace(
                         "ringBellScreen?minutes=$minutes?quantityOfHits=${bellUiState.quantityOfHits}"
                     )
                 }
@@ -91,35 +99,34 @@ fun TimerNavHost(
                 bellUiState
             ) {
                 val goToNextScreen: () -> Unit =
-                    when (navController.previousBackStackEntry?.destination?.route) {
-                        HIT_BELL_SCREEN -> {
-                            val destination = if (bellUiState.quantityOfHits == 1) {
-                                TIMER_SCREEN
-                            } else {
-                                HIT_BELL_SCREEN.replace(
-                                    "quantityOfHits",
-                                    (bellUiState.quantityOfHits - 1).toString()
-                                )
-                            }
-                            {
-                                navController.navigate(destination.replace("minutes", minutes))
-                            }
-                        }
-
-                        TIMER_SCREEN -> {
-                            {
-                                navController.navigate(
-                                    SELECT_TIMER_SCREEN.replace(
-                                        "minutes",
-                                        minutes
+                    {
+                        when (previousRoute) {
+                            HIT_BELL_SCREEN -> {
+                                val destination = if (bellUiState.quantityOfHits == 1) {
+                                    TIMER_SCREEN
+                                } else {
+                                    HIT_BELL_SCREEN.replace(
+                                        "quantityOfHits",
+                                        (bellUiState.quantityOfHits - 1).toString()
                                     )
+                                }
+                                previousRoute = RING_BELL_SCREEN
+                                navigateWithoutTrace(destination.replace("minutes", minutes))
+                            }
+
+                            TIMER_SCREEN -> {
+                                previousRoute = RING_BELL_SCREEN
+                                navigateWithoutTrace(
+                                    SELECT_TIMER_SCREEN.replace(
+                                    "minutes",
+                                    minutes))
+                            }
+                            else -> {
+                                Timber.d(
+                                    "reach in a not covered case destination =" +
+                                            " $previousRoute"
                                 )
                             }
-                        }
-
-                        else -> {
-                            { Timber.d("reach in a not covered case destination =" +
-                                    " ${navController.previousBackStackEntry?.destination?.route}") }
                         }
                     }
                 bellViewModel.startRingBell(goToNextScreen)
@@ -132,14 +139,18 @@ fun TimerNavHost(
             val timerUIState by timerViewModel.uiState.collectAsStateWithLifecycle()
             TimerScreen(
                 goToBellRingScreen = {
-                    navController.navigate(RING_BELL_SCREEN) {
-                        launchSingleTop = true
-                        popUpTo(0)
-                    }
+                    previousRoute = TIMER_SCREEN
+                    navigateWithoutTrace(RING_BELL_SCREEN)
                 },
                 startTimer = timerViewModel::startTimer,
                 uiState = timerUIState,
-                selectMinutes = timerViewModel.selectTimerInMinutes
+                selectMinutes = timerViewModel.selectTimerInMinutes,
+                onStop = {
+                    previousRoute = TIMER_SCREEN
+                    timerViewModel.stopTimer {
+                        navigateWithoutTrace(SELECT_TIMER_SCREEN)
+                    }
+                }
             )
         }
     }

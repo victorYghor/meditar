@@ -16,6 +16,7 @@ import com.victoryghor.meditar.Destinations.RING_BELL_SCREEN
 import com.victoryghor.meditar.Destinations.SELECT_TIMER_SCREEN
 import com.victoryghor.meditar.Destinations.TIMER_SCREEN
 import com.victoryghor.meditar.util.removeCurlyBrackets
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.update
 
 data class BellUiState(
@@ -24,25 +25,16 @@ data class BellUiState(
 )
 
 class BellViewModel(handle: SavedStateHandle) : ViewModel() {
-    private lateinit var _uiState: MutableStateFlow<BellUiState>
+    private val _uiState: MutableStateFlow<BellUiState> by lazy {
+        MutableStateFlow(BellUiState(
+            minutesOfPractice = handle.get<String>("minutes")?.removeCurlyBrackets()?.toInt(),
+            quantityOfHits = handle.get<String>("quantityOfHits")?.removeCurlyBrackets()?.toInt() ?: 3
+        ))
+    }
     val uiState by lazy {
         _uiState.asStateFlow()
     }
-    val minutesOfPractice by lazy {
-        handle.get<String>("minutes")?.removeCurlyBrackets()?.toInt()
-    }
 
-    val quantityOfHits by lazy {
-        handle.get<String>("quantityOfHits")?.removeCurlyBrackets()?.toInt() ?: 3
-    }
-    init {
-        _uiState = MutableStateFlow(
-            BellUiState(
-                minutesOfPractice = minutesOfPractice,
-                quantityOfHits = quantityOfHits
-            )
-        )
-    }
     fun startRingBell(goToNextScreen: () -> Unit) {
         viewModelScope.launch {
             // tocar o sino
@@ -52,7 +44,6 @@ class BellViewModel(handle: SavedStateHandle) : ViewModel() {
             }
         }
     }
-
     fun startHitBell(goToNextScreen: () -> Unit) {
         viewModelScope.launch {
             delay(1_200L)

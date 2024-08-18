@@ -27,7 +27,8 @@ fun TimerScreen(
     goToBellRingScreen: () -> Unit,
     startTimer: (() -> Unit) -> Unit,
     uiState: TimerUIState,
-    selectMinutes: Int
+    selectMinutes: Int,
+    onStop: () -> Unit
 ) {
     Column(
         verticalArrangement = Arrangement.Center,
@@ -53,14 +54,14 @@ fun TimerScreen(
         }
         Spacer(modifier = Modifier.size(128.dp))
         CancelButton(
-            onClick = {},
+            onClick = { onStop() },
             R.string.stop,
         )
     }
 }
 
-@Preview
-@Composable
-private fun TimerScreenPreview() {
-    TimerScreen({}, {}, uiState = TimerUIState(5, 30, 180f), 11)
-}
+//@Preview
+//@Composable
+//private fun TimerScreenPreview() {
+//    TimerScreen({}, {}, uiState = TimerUIState(5, 30, 180f), 11)
+//}
