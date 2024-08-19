@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">meditar</string>
+    <string name="app_name" translatable="false">Meditar</string>
     <string name="test" translatable="false">Test</string>
     <string name="start">Start</string>
     <string name="timer_picker">timePicker</string>

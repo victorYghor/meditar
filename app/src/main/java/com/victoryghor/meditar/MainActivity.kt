@@ -24,7 +24,6 @@ class MainActivity: ComponentActivity() {
     private lateinit var bellPlayers: MutableList<MediaPlayer>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Timber.plant(Timber.DebugTree())
         bellPlayers = MutableList(3) { MediaPlayer.create(this, R.raw.bell_sound) }
         window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
         setContent {
