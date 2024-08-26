@@ -13,9 +13,10 @@ android {
         applicationId = "com.victoryghor.meditar"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "4"
 
+        ndk.debugSymbolLevel = "FULL"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
