@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="start">Começar</string>
+    <string name="timer_picker">selectorDeTempo</string>
+    <string name="select_a_number_greater_than_0">Selecione um número maior que 0</string>
+    <string name="you_cannot_click_in_the_button">Você não pode clickar no botão</string>
+    <string name="minutes">Minutos</string>
+    <string name="stop">Parar</string>
+    <string name="hitting_a_tibetan_bell">Batendo em um sino tibetano</string>
+    <string name="minutes_of_practice">%d minutos</string>
+    <string name="the_bell_will_be_hitting_x_times">O sino vai bater %d vezes</string>
+</resources>

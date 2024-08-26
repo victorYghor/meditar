@@ -1,3 +1,4 @@
+
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
@@ -12,9 +13,10 @@ android {
         applicationId = "com.victoryghor.meditar"
         minSdk = 26
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 4
+        versionName = "4"
 
+        ndk.debugSymbolLevel = "FULL"
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
@@ -23,11 +25,13 @@ android {
 
     buildTypes {
         release {
-            isMinifyEnabled = false
+            isMinifyEnabled = true
+            isShrinkResources = true
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            ndk.debugSymbolLevel = "FULL"
         }
     }
     compileOptions {
@@ -61,6 +65,7 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling-preview")
     implementation("androidx.compose.material3:material3")
     implementation("androidx.appcompat:appcompat:1.7.0")
+    implementation("androidx.navigation:navigation-common-ktx:2.7.7")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.2.1")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.6.1")
@@ -69,6 +74,8 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
+    // Timber
+    implementation("com.jakewharton.timber:timber:5.0.1")
     //navigation
     implementation("androidx.navigation:navigation-runtime-ktx:2.7.7")
     implementation("androidx.navigation:navigation-compose:2.7.7")

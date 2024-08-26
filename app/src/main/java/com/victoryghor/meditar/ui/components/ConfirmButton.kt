@@ -2,8 +2,6 @@ package com.victoryghor.meditar.ui.components
 
 import android.widget.Toast
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
@@ -18,7 +16,7 @@ import androidx.compose.ui.unit.sp
 import com.victoryghor.meditar.R
 import com.victoryghor.meditar.ui.theme.black400
 import com.victoryghor.meditar.ui.theme.white200
-import com.victoryghor.meditar.ui.theme.white200Tranparent
+import com.victoryghor.meditar.ui.theme.white200Transparent
 
 
 @Composable
@@ -41,7 +39,7 @@ fun ConfirmButton(
     Button(
         onClick = handleDisableClick,
         colors = if(disabled)
-            ButtonDefaults.buttonColors(containerColor = white200Tranparent)
+            ButtonDefaults.buttonColors(containerColor = white200Transparent)
         else
             ButtonDefaults.buttonColors(containerColor = white200),
         modifier = modifier.size(height = 80.dp, width = 256.dp)

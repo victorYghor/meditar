@@ -16,21 +16,26 @@ import com.victoryghor.meditar.ui.theme.redDark
 /**
  * @param angle a porcentagem do timer em graus, 360f para uma volta completa.
  */
-@Preview
 @Composable
-fun Timer(angle: Float = 270f) {
+fun Timer(angle: Float) {
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier.background(blackBackground)
     ) {
-        Canvas(modifier = Modifier.size(260.dp)) {
+        Canvas(modifier = Modifier.size(330.dp)) {
             drawArc(redDark, -90f, angle, true)
         }
-        Canvas(modifier = Modifier.size(220.dp)) {
+        Canvas(modifier = Modifier.size(300.dp)) {
             drawArc(blackBackground, -90f, angle, true)
         }
-        Canvas(modifier = Modifier.size(220.dp)) {
+        Canvas(modifier = Modifier.size(300.dp)) {
             drawArc(blackBackground, -90f, angle, true, style = Stroke(10f))
         }
     }
+}
+
+@Preview
+@Composable
+fun TimerPreview() {
+    Timer(angle = 270f)
 }
