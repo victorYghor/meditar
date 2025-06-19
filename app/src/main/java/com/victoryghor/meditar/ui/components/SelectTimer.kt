@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListState
@@ -22,6 +23,7 @@ import com.victoryghor.meditar.R
 import com.victoryghor.meditar.ui.theme.black100
 import com.victoryghor.meditar.ui.theme.blackBackground
 import com.victoryghor.meditar.ui.theme.white0
+import com.victoryghor.meditar.ui.theme.white100
 import com.victoryghor.meditar.ui.theme.white200
 
 private const val MAX_TIME_IN_MINUTES = 120
@@ -32,14 +34,14 @@ fun SelectTimer(state: LazyListState, modifier: Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
+        modifier = modifier
     ) {
-        Text(stringResource(R.string.minutes), fontSize = 40.sp, color = black100)
-        Spacer(modifier = Modifier.height(16.dp))
+        Text(stringResource(R.string.minutes), fontSize = 40.sp, color = white100, modifier = Modifier.padding(8.dp))
         LazyColumn(
             state = state,
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.Center,
-            modifier = modifier.size(width = 128.dp, height = 256.dp)
+            modifier = Modifier.size(width = 128.dp, height = 256.dp).padding(8.dp)
         ) {
             val centerIndex = state.firstVisibleItemIndex + 1
             minutes.forEach { minute ->
