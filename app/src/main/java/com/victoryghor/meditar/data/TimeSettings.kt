@@ -1,4 +1,4 @@
-package com.victoryghor.meditar.model
+package com.victoryghor.meditar.data
 import androidx.annotation.Keep
 import kotlinx.serialization.Serializable
 

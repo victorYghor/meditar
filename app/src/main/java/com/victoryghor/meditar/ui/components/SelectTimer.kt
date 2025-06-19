@@ -24,10 +24,11 @@ import com.victoryghor.meditar.ui.theme.blackBackground
 import com.victoryghor.meditar.ui.theme.white0
 import com.victoryghor.meditar.ui.theme.white200
 
+private const val MAX_TIME_IN_MINUTES = 120
 
 @Composable
 fun SelectTimer(state: LazyListState, modifier: Modifier) {
-    val minutes = List<Int>(62) { it }
+    val minutes = List<Int>(MAX_TIME_IN_MINUTES + 2) { it }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,

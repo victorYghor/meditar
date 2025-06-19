@@ -9,16 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import com.victoryghor.meditar.navigation.TimerNavHost
 import com.victoryghor.meditar.ui.theme.MeditarTheme
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.GlobalScope.coroutineContext
-import kotlinx.coroutines.coroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import timber.log.Timber
-import kotlin.coroutines.coroutineContext
 
 class MainActivity: ComponentActivity() {
     private lateinit var bellPlayers: MutableList<MediaPlayer>

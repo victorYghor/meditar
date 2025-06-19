@@ -1,4 +1,4 @@
-package com.victoryghor.meditar.model
+package com.victoryghor.meditar.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
