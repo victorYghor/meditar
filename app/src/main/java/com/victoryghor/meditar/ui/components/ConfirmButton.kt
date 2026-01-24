@@ -23,9 +23,9 @@ import com.victoryghor.meditar.ui.theme.white200Transparent
 fun ConfirmButton(
     onClick: () -> Unit,
     text: Int,
+    modifier: Modifier = Modifier,
     disabled: Boolean = false,
-    @StringRes reasonOfDisabled: Int = R.string.you_cannot_click_in_the_button,
-    modifier: Modifier = Modifier
+    @StringRes reasonOfDisabled: Int = R.string.you_cannot_click_in_the_button
 ) {
     val alertChooseATime = Toast.makeText(
         LocalContext.current,

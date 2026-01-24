@@ -1,4 +1,4 @@
-package com.victoryghor.meditar.timer
+package com.victoryghor.meditar.ui.screen.timer
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.SavedStateHandle

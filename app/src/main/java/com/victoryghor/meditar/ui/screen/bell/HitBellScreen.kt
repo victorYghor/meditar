@@ -1,4 +1,4 @@
-package com.victoryghor.meditar.bell
+package com.victoryghor.meditar.ui.screen.bell
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.Orientation
@@ -18,17 +18,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.victoryghor.meditar.R
+import com.victoryghor.meditar.ui.theme.black100
 import com.victoryghor.meditar.ui.theme.blackBackground
-import com.victoryghor.meditar.ui.theme.white0
-
+import com.victoryghor.meditar.ui.components.TextMinutesOfPractice
 
 @Composable
-fun RingBellScreen(
+fun HitBellScreen(
     uiState: BellUiState,
-    startRingBell: () -> Unit
-    ) {
+    startHitBell: () -> Unit
+) {
     Column(
         verticalArrangement = Arrangement.Top,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -39,16 +38,27 @@ fun RingBellScreen(
             .scrollable(rememberScrollState(), orientation = Orientation.Vertical)
     ) {
         LaunchedEffect(Unit) {
-            startRingBell()
+            startHitBell()
         }
         uiState.minutesOfPractice?.let {
-            Text(
-                stringResource(R.string.minutes_of_practice).format(it),
-                fontSize = 32.sp,
-                color = white0
-            )
+            TextMinutesOfPractice(it)
         }
-        Spacer(modifier = Modifier.size(220.dp))
-        BellImage(R.drawable.bell_ring)
+        Spacer(modifier = Modifier.size(128.dp))
+        BellImage(R.drawable.hitbell)
+        Spacer(modifier = Modifier.size(128.dp))
+        if (uiState.quantityOfHits != 0)
+            Text(
+                stringResource(R.string.the_bell_will_be_hitting_x_times).format(uiState.quantityOfHits),
+                fontSize = 24.sp,
+                color = black100
+            )
     }
 }
+
+
+
+//@Preview
+//@Composable
+//fun BellScreenPreview() {
+//    HitBellScreen(15)
+//}

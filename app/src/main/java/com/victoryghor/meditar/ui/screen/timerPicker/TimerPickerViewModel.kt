@@ -1,13 +1,12 @@
-package com.victoryghor.meditar.timerPicker
+package com.victoryghor.meditar.ui.screen.timerPicker
 
 import android.app.Application
 import androidx.compose.foundation.lazy.LazyListState
 import androidx.datastore.core.DataStore
 import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.victoryghor.meditar.model.TimeSettings
-import com.victoryghor.meditar.model.timeSettingsDataStore
+import com.victoryghor.meditar.data.TimeSettings
+import com.victoryghor.meditar.data.timeSettingsDataStore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,7 +15,6 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 
 data class TimerPickerState(
     val listState: LazyListState = LazyListState(),

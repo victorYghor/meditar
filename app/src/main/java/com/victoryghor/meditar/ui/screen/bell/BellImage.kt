@@ -1,4 +1,4 @@
-package com.victoryghor.meditar.bell
+package com.victoryghor.meditar.ui.screen.bell
 
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image

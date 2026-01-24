@@ -1,24 +1,16 @@
-package com.victoryghor.meditar.bell
+package com.victoryghor.meditar.ui.screen.bell
 
 import android.media.MediaPlayer
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import androidx.navigation.NavController
-import com.victoryghor.meditar.Destinations
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import com.victoryghor.meditar.Destinations.HIT_BELL_SCREEN
-import com.victoryghor.meditar.Destinations.RING_BELL_SCREEN
-import com.victoryghor.meditar.Destinations.SELECT_TIMER_SCREEN
-import com.victoryghor.meditar.Destinations.TIMER_SCREEN
 import com.victoryghor.meditar.util.removeCurlyBrackets
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.update
 
 data class BellUiState(
     val minutesOfPractice: Int? = null,
